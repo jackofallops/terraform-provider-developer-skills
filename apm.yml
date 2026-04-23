@@ -1,0 +1,49 @@
+# apm.yml - Agent Package Manager Manifest
+name: terraform-provider-developer-skills
+version: 1.0.0
+description: "High-level skills for building, testing, and documenting Terraform Providers."
+author: "jackofallops"
+
+# Where the agent should look for logic
+source:
+  type: git
+  url: https://github.com/jackofallops/terraform-provider-developer-skills.git
+
+# Define the "Skills" (instructions + context)
+capabilities:
+  - name: deprecate-property
+    path: ./skills/deprecate-property
+    description: "Assist in deprecating or renaming a property, following the breaking changes guide."
+
+  - name: deprecate-resource
+    path: ./skills/deprecate-resource
+    description: "Assist in deprecating an existing resource or data source, following the breaking changes guide."
+
+  - name: modify-native-resource
+    path: ./skills/modify-native-resource
+    description: "Assist in adding a new property to an existing legacy resource (native Plugin SDK)."
+
+  - name: modify-typed-resource
+    path: ./skills/modify-typed-resource
+    description: "Assist in adding a new property to an existing legacy resource (Typed SDK wrapper)."
+
+  - name: resource-framework-migration
+    path: ./skills/resource-framework-migration
+    description: "Assist in migrating resources from `terraform-plugin-sdk` (legacy) to `terraform-plugin-framework` using the `internal/sdk` wrapper."
+
+  - name: state-upgrade-required
+    path: ./skills/state-upgrade-required
+    description: "Assist in creating a resource state migration for updating the schema and its values in a Terraform resource that uses terraform-plugin-sdk v2."
+
+  - name: terraform-dag
+    path: ./skills/terraform-dag
+    description: "Understand Terraform's execution engine as a concurrent scheduler and distinguish between logic errors and DAG race conditions."
+
+# Dependencies: Pull in the official HashiCorp MCP server for registry context
+dependencies:
+  mcp:
+    - hashicorp/terraform-mcp-server@latest
+
+# Hooks: Run these when the skill is "installed" into a project
+hooks:
+  post-install: "echo 'Terraform Provider skills loaded. Agent is now optimized for Go + TF SDK development.'"
