@@ -1,0 +1,67 @@
+# Secrets & API Keys
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+
+# LangChain / LangGraph / LangSmith
+.langgraph_api/
+.langsmith/
+trace_provider.log
+
+# CrewAI & AutoGen
+# These often generate local state or memory databases
+.crewai/
+.autogen/
+*.log
+agent_trace.json
+__marimo__/
+
+# Model Context Protocol (MCP)
+mcp-servers.local.json
+.mcp/
+
+# Vector Databases
+chroma_db/
+pinecone_local/
+faiss_index/
+*.sqlite
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+build/
+dist/
+*.egg-info/
+
+# Node.js / TypeScript
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.eslintcache
+.turbo/
+
+# IDEs
+.vscode/
+.idea/
+.cursor/
+*.swp
+*.swo
+
+# AI Assistant Indexes
+.cursorignore
+.idx/
+
+# Agent Output
+outputs/
+generated_code/
+temp/
+debug_*.json
