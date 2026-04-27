@@ -1,0 +1,59 @@
+# AGENTS.md
+
+This file configures AI Agents working in this repository with the skills and context
+needed for `terraform-provider-azurerm` development.
+
+## Skills
+
+The following skills are loaded from
+[terraform-provider-developer-skills](https://github.com/jackofallops/terraform-provider-developer-skills).
+Each skill provides the agent with step-by-step instructions, code patterns, and guardrails
+for a specific class of work.
+
+| Skill | When to use |
+|---|---|
+| `deprecate-property` | Deprecating or renaming a resource property for v5.0 |
+| `deprecate-resource` | Deprecating an entire resource or data source for v5.0 |
+| `modify-native-resource` | Adding a property to a native `*pluginsdk.Resource` |
+| `modify-typed-resource` | Adding a property to a Typed SDK (`sdk.Resource`) resource |
+| `migrate-to-typed-resource` | Converting a native resource to the Typed SDK wrapper |
+| `resource-framework-migration` | Migrating a resource from `terraform-plugin-sdk` to `terraform-plugin-framework` via `internal/sdk` |
+| `state-upgrade-required` | Implementing a state migration for schema or value changes |
+| `preflight-validation` | Adding Azure Preflight Validation to a resource's `CustomizeDiff` |
+| `provider-test-patterns` | Writing `basic`, `complete`, and `requiresImport` acceptance tests |
+| `run-acceptance-tests` | Running and diagnosing `TestAcc` tests, including VCR replay |
+| `provider-docs` | Creating or updating documentation in `website/docs/` |
+| `terraform-dag` | Debugging parallel test failures and DAG-related race conditions |
+
+## Conventions
+
+- **Breaking changes** are gated behind `features.FivePointOh()`. The default (non-gated) code path must always be the v5.0 behaviour.
+- **Typed resources** implement `sdk.Resource` with a `*Model` struct and `tfschema` tags. Use this pattern for all new resources and when migrating existing ones.
+- **Documentation** changes must be included in the same PR as the schema or code changes they describe.
+- **Acceptance tests** use `acceptance.BuildTestData` for deterministic names. Do not call `uuid.New()` or `time.Now()` in test configs.
+- **Acceptance tests** require Azure credentials (`ARM_*` env vars). If these are not available to you, ask the user to run the test and return the output. Use `TC_TEST_VIA_VCR=replay` where a cassette exists to avoid real API calls.
+
+## Repository layout (key paths)
+
+```
+internal/
+  services/<service>/          # Resource and data source implementations
+  sdk/                         # Typed SDK wrapper (sdk.Resource, sdk.ResourceMetaData, etc.)
+  features/                    # Feature flags (features.FivePointOh(), etc.)
+  preflight/                   # Preflight validation helpers
+website/
+  docs/
+    r/                         # Resource documentation
+    d/                         # Data source documentation
+    actions/                   # Action documentation
+    functions/                 # Provider function documentation
+    ephemeral-resources/       # Ephemeral resource documentation
+    list-resources/            # List resource documentation
+    5.0-upgrade-guide.html.markdown  # Breaking changes upgrade guide
+```
+
+## References
+
+- [Contributing guide](contributing/)
+- [Breaking changes guide](contributing/topics/guide-breaking-changes.md)
+- [Preflight validation guide](internal/preflight/README.md)

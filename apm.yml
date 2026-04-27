@@ -51,6 +51,14 @@ capabilities:
     path: ./skills/provider-docs
     description: "Create or update azurerm provider documentation for all doc types (resources, data sources, actions, functions, ephemeral resources, list resources) with correct frontmatter, structure, and quality rules."
 
+  - name: preflight-validation
+    path: ./skills/preflight-validation
+    description: "Assist in implementing Azure Preflight Validation in a resource's CustomizeDiff function, including selecting the correct pattern (1, 2, or 3) for the resource's create/update semantics."
+
+  - name: migrate-to-typed-resource
+    path: ./skills/migrate-to-typed-resource
+    description: "Assist in converting a native (*pluginsdk.Resource) resource to the Typed SDK wrapper (internal/sdk), following the provider's current implementation standard."
+
 # Dependencies: Pull in the official HashiCorp MCP server for registry context
 dependencies:
   mcp:

@@ -16,6 +16,8 @@ A collection of skills for assisting in Terraform Provider Development against b
 | **provider-test-patterns** | Write acceptance tests following the azurerm test structure (`basic`, `complete`, `requiresImport`), using `acceptance.BuildTestData` and the `acceptance` package. |
 | **run-acceptance-tests** | Run and diagnose `TestAcc` tests, including VCR replay mode, credential requirements, and the diagnostics ladder. |
 | **provider-docs** | Create or update provider documentation for all doc types (`r/`, `d/`, `actions/`, `functions/`, `ephemeral-resources/`, `list-resources/`) with correct azurerm frontmatter and structure. |
+| **preflight-validation** | Implement Azure Preflight Validation in a resource's `CustomizeDiff`, selecting the correct pattern for the resource's create/update semantics. |
+| **migrate-to-typed-resource** | Convert a native `*pluginsdk.Resource` to the Typed SDK wrapper (`internal/sdk`), following the provider's current implementation standard. |
 
 ## Installation (Agent Package Manager)
 
