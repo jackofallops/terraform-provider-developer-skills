@@ -35,6 +35,12 @@ the **complete** resource body as it will be sent to the ARM API.
 | Update uses a different full PUT body than create | **3** — separate expand functions |
 | Update uses PATCH | **3** with a dedicated `expandUpdateForMyResource` |
 
+**Pattern 1 is the right default for most ARM resources.** `ResourceDiff` always contains the
+complete planned state — unchanged fields on an update are resolved from prior state, so
+`expandCreateForMyResource` has all the data it needs regardless of operation type. Pattern 3
+is only needed when the create and update PUT bodies are structurally different (e.g. an
+immutable field that ARM rejects if re-sent on update), not because data is missing.
+
 ## Implementation reference
 
 Full code examples for Patterns 1, 2, and 3 — including the ForceNew detection approach
