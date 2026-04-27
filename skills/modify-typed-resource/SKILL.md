@@ -103,13 +103,38 @@ func (r ExampleResource) Read() sdk.ResourceFunc {
 }
 ```
 
-## Documentation
+## Adding CustomizeDiff
 
-Update the resource documentation in the same PR as the schema change. Refer to the `provider-docs` skill for the full template and rules.
+To implement `CustomizeDiff` on a Typed resource, the resource struct must implement the
+`sdk.ResourceWithCustomizeDiff` interface. Add the compliance assertion and the method:
 
-- **Resource doc**: `website/docs/r/<service>_<resource_name>.html.markdown`
-- Add the new property to the **Arguments Reference** (if user-configurable) or **Attributes Reference** (if read-only).
-- If the property has `ForceNew`, note: `Changing this forces a new <Resource> to be created.`
+```go
+// Compile-time assertion — add alongside other interface assertions at the top of the file
+var _ sdk.ResourceWithCustomizeDiff = ExampleResource{}
+
+func (r ExampleResource) CustomizeDiff() sdk.ResourceFunc {
+    return sdk.ResourceFunc{
+        Timeout: 5 * time.Minute,
+        Func: func(ctx context.Context, metadata sdk.ResourceMetaData) error {
+            if metadata.ResourceDiff == nil {
+                return nil
+            }
+
+            var model ExampleResourceModel
+            if err := metadata.DecodeDiff(&model); err != nil {
+                return err
+            }
+
+            // logic here
+
+            return nil
+        },
+    }
+}
+```
+
+The SDK wrapper in `sdk/wrapper_resource.go` automatically detects the interface and wires
+up `CustomizeDiff` — no changes to the resource registration function are needed.
 
 ## Safety & Verification
 

@@ -82,13 +82,28 @@ func resourceExampleRead(d *pluginsdk.ResourceData, meta interface{}) error {
 }
 ```
 
-## Documentation
+## Adding CustomizeDiff
 
-Update the resource documentation in the same PR as the schema change. Refer to the `provider-docs` skill for the full template and rules.
+Native resources support a `CustomizeDiff` field in the `*pluginsdk.Resource` struct:
 
-- **Resource doc**: `website/docs/r/<service>_<resource_name>.html.markdown`
-- Add the new property to the **Arguments Reference** (if user-configurable) or **Attributes Reference** (if read-only).
-- If the property has `ForceNew`, note: `Changing this forces a new <Resource> to be created.`
+```go
+func resourceExample() *pluginsdk.Resource {
+    return &pluginsdk.Resource{
+        // ... existing CRUD
+        CustomizeDiff: pluginsdk.DefaultDiff(resourceExampleCustomizeDiff),
+    }
+}
+
+func resourceExampleCustomizeDiff(ctx context.Context, d *pluginsdk.ResourceDiff, meta interface{}) error {
+    // logic here
+    return nil
+}
+```
+
+-> **Note:** Preflight validation (`internal/preflight`) is not currently supported in
+native resource `CustomizeDiff` functions without additional wiring. If preflight
+validation is required, consider migrating the resource to the Typed SDK wrapper
+using the `resource-framework-migration` skill.
 
 ## Safety & Verification
 
