@@ -39,6 +39,18 @@ capabilities:
     path: ./skills/terraform-dag
     description: "Understand Terraform's execution engine as a concurrent scheduler and distinguish between logic errors and DAG race conditions."
 
+  - name: provider-test-patterns
+    path: ./skills/provider-test-patterns
+    description: "Write acceptance tests for azurerm resources following the established test structure (basic, complete, requiresImport), using acceptance.BuildTestData and the acceptance package wrapper."
+
+  - name: run-acceptance-tests
+    path: ./skills/run-acceptance-tests
+    description: "Run and diagnose acceptance tests for terraform-provider-azurerm, including VCR replay mode, credential requirements, and the diagnostics ladder."
+
+  - name: provider-docs
+    path: ./skills/provider-docs
+    description: "Create or update azurerm provider documentation for all doc types (resources, data sources, actions, functions, ephemeral resources, list resources) with correct frontmatter, structure, and quality rules."
+
 # Dependencies: Pull in the official HashiCorp MCP server for registry context
 dependencies:
   mcp:

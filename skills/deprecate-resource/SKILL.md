@@ -50,8 +50,10 @@ if features.FivePointOh() {
 
 ### 4. Documentation
 
-- Add a `Note` to the resource documentation (`website/docs/r/*.html.markdown`).
+- Add a deprecation callout to the resource doc (`website/docs/r/*.html.markdown`) using the `->` syntax:
+  `-> **Note:** The <resource> resource has been deprecated and will be removed in v5.0 of the AzureRM Provider.`
 - Update the upgrade guide (`website/docs/5.0-upgrade-guide.markdown`) under `## Removed Resources`.
+- Refer to the `provider-docs` skill for the correct template and path for each doc type (`website/docs/r/`, `website/docs/d/`, etc.).
 
 ## Safety & Verification
 

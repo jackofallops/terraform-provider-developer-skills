@@ -103,6 +103,14 @@ func (r ExampleResource) Read() sdk.ResourceFunc {
 }
 ```
 
+## Documentation
+
+Update the resource documentation in the same PR as the schema change. Refer to the `provider-docs` skill for the full template and rules.
+
+- **Resource doc**: `website/docs/r/<service>_<resource_name>.html.markdown`
+- Add the new property to the **Arguments Reference** (if user-configurable) or **Attributes Reference** (if read-only).
+- If the property has `ForceNew`, note: `Changing this forces a new <Resource> to be created.`
+
 ## Safety & Verification
 
 - **Human Review**: Verify that the `tfschema` tag matches the schema key.

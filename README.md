@@ -13,6 +13,9 @@ A collection of skills for assisting in Terraform Provider Development against b
 | **resource-framework-migration** | Assist in migrating resources from `terraform-plugin-sdk` (legacy) to `terraform-plugin-framework` using the `internal/sdk` wrapper. |
 | **state-upgrade-required** | Assist in creating a resource state migration for updating the schema and its values in a Terraform resource that uses `terraform-plugin-sdk` v2. |
 | **terraform-dag** | Understand Terraform's execution engine as a concurrent scheduler and distinguish between logic errors and DAG race conditions. |
+| **provider-test-patterns** | Write acceptance tests following the azurerm test structure (`basic`, `complete`, `requiresImport`), using `acceptance.BuildTestData` and the `acceptance` package. |
+| **run-acceptance-tests** | Run and diagnose `TestAcc` tests, including VCR replay mode, credential requirements, and the diagnostics ladder. |
+| **provider-docs** | Create or update provider documentation for all doc types (`r/`, `d/`, `actions/`, `functions/`, `ephemeral-resources/`, `list-resources/`) with correct azurerm frontmatter and structure. |
 
 ## Installation (Agent Package Manager)
 
