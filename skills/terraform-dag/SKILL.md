@@ -1,6 +1,15 @@
-# Skill: Terraform Provider Concurrency & DAG Logic
+---
+name: terraform-dag
+description: Understand Terraform's execution engine as a concurrent scheduler and distinguish between logic errors in Provider code (Go) and race conditions caused by the Directed Acyclic Graph (DAG) during TestAcc runs.
+triggers:
+  - "DAG race condition"
+  - "parallel test failure"
+  - "concurrency bug"
+  - "VCR cassette mismatch"
+---
 
-## Capability Statement
+# Terraform Provider Concurrency & DAG Logic
+
 The agent understands Terraform's execution engine as a concurrent scheduler. It can distinguish between logic errors in Provider code (Go) and race conditions caused by the Directed Acyclic Graph (DAG) during `TestAcc` runs.
 
 ## Core Concepts for Provider Debugging
