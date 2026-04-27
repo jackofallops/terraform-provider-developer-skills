@@ -33,7 +33,7 @@ func TestAccExampleResource_basic(t *testing.T) {
 
     data.ResourceTest(t, r, []acceptance.TestStep{
         {
-            Config: r.basicConfig(data),
+            Config: r.basic(data),
             Check: acceptance.ComposeTestCheckFunc(
                 check.That(data.ResourceName).ExistsInAzure(r),
                 check.That(data.ResourceName).Key("name").HasValue(data.RandomString),
@@ -49,7 +49,7 @@ func TestAccExampleResource_complete(t *testing.T) {
 
     data.ResourceTest(t, r, []acceptance.TestStep{
         {
-            Config: r.completeConfig(data),
+            Config: r.complete(data),
             Check: acceptance.ComposeTestCheckFunc(
                 check.That(data.ResourceName).ExistsInAzure(r),
             ),
@@ -64,12 +64,12 @@ func TestAccExampleResource_requiresImport(t *testing.T) {
 
     data.ResourceTest(t, r, []acceptance.TestStep{
         {
-            Config: r.basicConfig(data),
+            Config: r.basic(data),
             Check: acceptance.ComposeTestCheckFunc(
                 check.That(data.ResourceName).ExistsInAzure(r),
             ),
         },
-        data.RequiresImportErrorStep(r.requiresImportConfig),
+        data.RequiresImportErrorStep(r.requiresImport),
     })
 }
 ```
@@ -104,7 +104,7 @@ func TestAccExampleResource_disappears(t *testing.T) {
 
     data.ResourceTest(t, r, []acceptance.TestStep{
         data.DisappearsStep(acceptance.DisappearsStepData{
-            Config:       r.basicConfig,
+            Config:       r.basic,
             TestResource: r,
         }),
     })
@@ -117,10 +117,10 @@ Use `acceptance.ComposeTestCheckFunc` (fails on first error) for standard checks
 
 ## Config Helpers
 
-Config functions are methods on the resource test struct. Reference `basic` config from `requiresImport` to avoid duplication:
+Config functions are methods on the resource test struct. Reference `basic` from `requiresImport` to avoid duplication:
 
 ```go
-func (r ExampleResource) basicConfig(data acceptance.TestData) string {
+func (r ExampleResource) basic(data acceptance.TestData) string {
     return fmt.Sprintf(`
 provider "azurerm" {
   features {}
@@ -139,7 +139,7 @@ resource "azurerm_example" "test" {
 `, data.RandomInteger, data.Locations.Primary)
 }
 
-func (r ExampleResource) requiresImportConfig(data acceptance.TestData) string {
+func (r ExampleResource) requiresImport(data acceptance.TestData) string {
     return fmt.Sprintf(`
 %s
 
@@ -148,7 +148,7 @@ resource "azurerm_example" "import" {
   resource_group_name = azurerm_example.test.resource_group_name
   location            = azurerm_example.test.location
 }
-`, r.basicConfig(data))
+`, r.basic(data))
 }
 ```
 
