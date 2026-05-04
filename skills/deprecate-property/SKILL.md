@@ -92,10 +92,14 @@ type ExampleModel struct {
 ### 5. Documentation and Upgrade Guide
 
 - **Upgrade Guide**: Update the upgrade guide (`website/docs/5.0-upgrade-guide.markdown`). Add an entry under `## Breaking changes in Resources` (or Data Sources) in alphabetical order, detailing the removed property, the new property, or the new default values.
-- **Resource Documentation**: Remove the deprecated property from the resource documentation and add the new property. Refer to the `provider-docs` skill for the correct template and path (`website/docs/r/` for resources, `website/docs/d/` for data sources).
-  - **Important**: Breaking changes gated behind `features.FivePointOh()` that are not yet active must **not** appear in the documentation. Do not add any `**Note:** This property will do x in 5.0` annotations.
+- **Resource Documentation**: Remove the deprecated property from the resource documentation and add the new property.
+  - **Important**: Breaking changes such as the default value changing, or other property behaviour changing in a way that will only be active when the major release has gone out *should not* be added to the documentation since these do not apply yet. Do not add any `**Note:** This property will do x in 5.0` notes in the documentation.
 
 ## Safety & Verification
 
 - **ConflictsWith**: Always set `ConflictsWith` between old and new properties to prevent ambiguity.
 - **Reference**: Follow the [Breaking Changes Guide](file:///Users/ste/code/go/src/github.com/hashicorp/terraform-provider-azurerm/contributing/topics/guide-breaking-changes.md).
+
+## Formatting
+
+When you modify a file that contains Terraform configuration (e.g., acceptance tests, markdown documentation), you **MUST** run the `terrafmt fmt -f <file>` command on the file to ensure the configuration meets Terraform's formatting standards.

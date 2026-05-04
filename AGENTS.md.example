@@ -57,3 +57,7 @@ website/
 - [Contributing guide](contributing/)
 - [Breaking changes guide](contributing/topics/guide-breaking-changes.md)
 - [Preflight validation guide](internal/preflight/README.md)
+
+## Code quality
+- **Formatting Go**: Always run `goimports` over edited Go files to ensure correct formatiing.
+- **Formatting Terraform**: Always run `terrafmt fmt -f <file>` on modified files that contain Terraform configuration (e.g., acceptance tests, markdown documentation).

@@ -165,6 +165,9 @@ func (r ExampleResource) IDValidationFunc() pluginsdk.SchemaValidateFunc {
 Each CRUD function becomes an `sdk.ResourceFunc`. The `Timeout` field replaces the native
 `Timeouts` block for that operation.
 
+> [!CAUTION]
+> **No shared CRUD helpers.** Do not attempt to deduplicate code by introducing a shared `submit` or `createUpdate` helper function. Each CRUD method (`Create`, `Update`) must be fully atomic, managing its own client calls and payload construction independently. The Typed wrapper SDK automatically handles `read-after-create` and `read-after-update`, so the `Func` should simply return `nil` upon success.
+
 **Pattern:**
 
 ```go
@@ -202,6 +205,7 @@ func (r ExampleResource) Create() sdk.ResourceFunc {
 | `utils.ResponseWasNotFound(resp)` | `response.WasNotFound(resp.HttpResponse)` (go-azure-helpers) |
 | `log.Printf("[DEBUG] ...")` | `metadata.Logger.Infof(...)` |
 | `tf.ImportAsExistsError(...)` | `metadata.ResourceRequiresImport(r.ResourceType(), id)` |
+| `return resourceExampleRead(d, meta)` | `return nil` (Wrapper automatically reads) |
 
 **`Read()` state-not-found pattern:**
 

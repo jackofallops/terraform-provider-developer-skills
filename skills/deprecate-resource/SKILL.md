@@ -50,12 +50,14 @@ if features.FivePointOh() {
 
 ### 4. Documentation
 
-- Add a deprecation callout to the resource doc (`website/docs/r/*.html.markdown`) using the `->` syntax:
-  `-> **Note:** The <resource> resource has been deprecated and will be removed in v5.0 of the AzureRM Provider.`
+- Add a `Note` to the resource documentation (`website/docs/r/*.html.markdown`).
 - Update the upgrade guide (`website/docs/5.0-upgrade-guide.markdown`) under `## Removed Resources`.
-- Refer to the `provider-docs` skill for the correct template and path for each doc type (`website/docs/r/`, `website/docs/d/`, etc.).
 
 ## Safety & Verification
 
 - **Feature Flag**: Always use `features.FivePointOh()` (or current major version flag) for conditional logic.
 - **Reference**: Follow the [Breaking Changes Guide](file:///Users/ste/code/go/src/github.com/hashicorp/terraform-provider-azurerm/contributing/topics/guide-breaking-changes.md).
+
+## Formatting
+
+When you modify a file that contains Terraform configuration (e.g., acceptance tests, markdown documentation), you **MUST** run the `terrafmt fmt -f <file>` command on the file to ensure the configuration meets Terraform's formatting standards.
