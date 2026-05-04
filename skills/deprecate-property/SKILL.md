@@ -56,7 +56,7 @@ if !features.FivePointOh() {
 
 Handle both properties in your logic. **It is critical that you strictly follow the `if !features.FivePointOh() { ... } else { ... }` pattern.** This ensures that the post-major release cleanup is as low effort as possible—consisting mostly of deleting the `if` block and keeping the `else` block.
 
-To achieve this, duplicate the future 5.0 logic inside the legacy `if` branch if necessary (e.g., when checking if the user supplied the new property early). The `else` block must contain **only** the pure, final 5.0 code without any legacy conditionals. 
+To achieve this, duplicate the future 5.0 logic inside the legacy `if` branch if necessary (e.g., when checking if the user supplied the new property early). The `else` block must contain **only** the pure, final 5.0 code without any legacy conditionals.
 
 ```go
 if !features.FivePointOh() {

@@ -17,6 +17,7 @@ Acceptance tests are Go tests with the `TestAcc` prefix. They make real API call
 Acceptance tests require Azure credentials via `ARM_*` environment variables. **If these are not explicitly available to the agent, do not attempt to run acceptance tests directly.** Instead, ask the user to run the test and return the output.
 
 This applies to:
+
 - All `TestAcc*` tests
 - Any test that touches Azure APIs or requires authentication
 
@@ -54,21 +55,25 @@ Always check whether a cassette exists before running in live mode. If unsure, a
 Apply these steps in order. Each step includes all previous options:
 
 1. **Avoid cached results** — add `-count=1`:
+
    ```bash
    TF_ACC=1 go test -run=TestAccX -count=1 -timeout 120m ./internal/services/<service>/...
    ```
 
 2. **Verbose output** — add `-v`:
+
    ```bash
    TF_ACC=1 go test -run=TestAccX -count=1 -v -timeout 120m ./internal/services/<service>/...
    ```
 
 3. **Debug logging** — set `TF_LOG=debug`:
+
    ```bash
    TF_ACC=1 TF_LOG=debug go test -run=TestAccX -count=1 -v -timeout 120m ./internal/services/<service>/...
    ```
 
 4. **Persist workspace** — set `TF_ACC_WORKING_DIR_PERSIST=1` to inspect the Terraform state and plan files after the run:
+
    ```bash
    TF_ACC=1 TF_LOG=debug TF_ACC_WORKING_DIR_PERSIST=1 go test -run=TestAccX -count=1 -v -timeout 120m ./internal/services/<service>/...
    ```

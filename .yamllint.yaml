@@ -4,3 +4,6 @@ extends: default
 rules:
   line-length: disable
   document-start: disable
+  truthy: disable
+  comments: disable
+  new-line-at-end-of-file: disable

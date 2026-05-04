@@ -82,6 +82,7 @@ Create the new `example_resource.go`. For large resources, a companion
 `example_resource_models.go` is acceptable.
 
 **Rules:**
+
 - Struct name: `ExampleResourceModel`
 - Field names: PascalCase
 - Tags: `tfschema:"schema_key_name"` — must match schema keys **exactly**

@@ -95,6 +95,7 @@ The `timeouts` block allows you to specify [timeouts](https://developer.hashicor
 ```shell
 terraform import azurerm_<resource_name>.example /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/<rg>/providers/Microsoft.<Namespace>/<ResourceType>/<name>
 ```
+
 ```
 
 **Rules:**
@@ -155,6 +156,7 @@ In addition to the Arguments listed above - the following Attributes are exporte
 The `timeouts` block allows you to specify [timeouts](https://developer.hashicorp.com/terraform/language/resources/configure#define-operation-timeouts) for certain actions:
 
 * `read` - (Defaults to 5 minutes) Used when retrieving the <Resource>.
+
 ```
 
 **Rules:**
@@ -215,6 +217,7 @@ This action supports the following arguments:
 * `<resource>_id` - (Required) The ID of the <resource> on which to perform the action.
 
 * `<param>` - (Required) <Description>. Possible values include `<value1>` and `<value2>`.
+
 ```
 
 **Rules:**
@@ -261,6 +264,7 @@ output "result" {
 ## Arguments
 
 1. `<arg>` (<Type>) <Description>.
+
 ```
 
 **Rules:**
@@ -313,6 +317,7 @@ The following arguments are supported:
 The following attributes are exported:
 
 * `<attr>` - <Description>.
+
 ```
 
 **Rules:**
@@ -372,6 +377,7 @@ This list resource supports the following arguments:
 * `subscription_id` - (Optional) The ID of the Subscription to query. Defaults to the value specified in the Provider Configuration.
 
 * `resource_group_name` - (Optional) The name of the Resource Group to query.
+
 ```
 
 **Rules:**

@@ -23,25 +23,28 @@ The `internal/sdk` wrapper provides a bridge between the legacy `ResourceData` p
 All resource models must be placed in a file named `*_models.go` within the service directory (e.g., `linux_virtual_machine_models.go`).
 
 #### Naming Conventions
+
 - **Main Model**: `[resourceName]ResourceModel` (e.g., `linuxVirtualMachineResourceModel`).
 - **Nested Models**: `[resourceName][Property]Model` (e.g., `virtualMachineSSHKeyModel`).
 
 #### Field Types
+
 - **Primitives**: Always use the `types` package (e.g., `types.String`, `types.Bool`, `types.Int64`).
 - **Lists/Sets of Primitives**: Use `types.List` or `types.Set`.
 - **Nested Objects**: Use `typehelpers.ListNestedObjectValueOf[T]` or `typehelpers.SetNestedObjectValueOf[T]`.
 - **Maps**: Use `typehelpers.MapValueOf[types.String]`.
 
 #### Struct Tags
+
 Struct tags must match the schema property names **exactly**.
 
 ```go
 type exampleResourceModel struct {
-	ID        types.String                         `tfsdk:"id"`
-	Name      types.String                         `tfsdk:"name"`
-	Location  types.String                         `tfsdk:"location"`
-	Tags      typehelpers.MapValueOf[types.String] `tfsdk:"tags"`
-	Secret    typehelpers.ListNestedObjectValueOf[exampleSecretModel] `tfsdk:"secret"`
+ ID        types.String                         `tfsdk:"id"`
+ Name      types.String                         `tfsdk:"name"`
+ Location  types.String                         `tfsdk:"location"`
+ Tags      typehelpers.MapValueOf[types.String] `tfsdk:"tags"`
+ Secret    typehelpers.ListNestedObjectValueOf[exampleSecretModel] `tfsdk:"secret"`
 }
 ```
 
@@ -53,11 +56,11 @@ Your resource struct must implement the `sdk.FrameworkWrappedResource` interface
 type exampleResource struct{}
 
 func (r *exampleResource) ResourceType() string {
-	return "azurerm_example_resource"
+ return "azurerm_example_resource"
 }
 
 func (r *exampleResource) ModelObject() any {
-	return &exampleResourceModel{}
+ return &exampleResourceModel{}
 }
 ```
 
@@ -85,6 +88,7 @@ func (r *exampleResource) Create(ctx context.Context, req resource.CreateRequest
 ### 5. Advanced Logic (Plan Modification & Validation)
 
 If the resource requires plan modification (e.g., `RequiresReplace`) or complex validation, implement:
+
 - `sdk.FrameworkWrappedResourceWithPlanModifier` (`ModifyPlan` method)
 - `sdk.FrameworkWrappedResourceWithConfigValidators` (`ConfigValidators` method)
 
@@ -94,13 +98,13 @@ In `internal/services/<service>/registration.go`, add the resource to the `resou
 
 ```go
 func (r Registration) FrameworkResources() []sdk.FrameworkWrappedResource {
-	if !features.FivePointOh() {
-		return []sdk.FrameworkWrappedResource{}
-	}
+ if !features.FivePointOh() {
+  return []sdk.FrameworkWrappedResource{}
+ }
 
-	return []sdk.FrameworkWrappedResource{
-		&exampleResource{},
-	}
+ return []sdk.FrameworkWrappedResource{
+  &exampleResource{},
+ }
 }
 ```
 

@@ -23,9 +23,9 @@ This file must define a struct that implements the `pluginsdk.StateUpgrade` inte
 package migration
 
 import (
-	"context"
+ "context"
 
-	"github.com/hashicorp/terraform-provider-azurerm/internal/tf/pluginsdk"
+ "github.com/hashicorp/terraform-provider-azurerm/internal/tf/pluginsdk"
 )
 
 var _ pluginsdk.StateUpgrade = ExampleResourceV0ToV1{}
@@ -34,21 +34,21 @@ type ExampleResourceV0ToV1 struct{}
 
 // Schema returns the exact schema representation from the PREVIOUS version (V0)
 func (ExampleResourceV0ToV1) Schema() map[string]*pluginsdk.Schema {
-	return map[string]*pluginsdk.Schema{
-		// ... Include the full previous schema here
-	}
+ return map[string]*pluginsdk.Schema{
+  // ... Include the full previous schema here
+ }
 }
 
 // UpgradeFunc performs the migration from the V0 raw state to the V1 raw state
 func (ExampleResourceV0ToV1) UpgradeFunc() pluginsdk.StateUpgraderFunc {
-	return func(ctx context.Context, rawState map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
-		// Example: Migrating a string property to an int
-		// oldProp := rawState["old_property"].(string)
-		// rawState["new_property"] = convertToInt(oldProp)
-		// delete(rawState, "old_property")
-		
-		return rawState, nil
-	}
+ return func(ctx context.Context, rawState map[string]interface{}, meta interface{}) (map[string]interface{}, error) {
+  // Example: Migrating a string property to an int
+  // oldProp := rawState["old_property"].(string)
+  // rawState["new_property"] = convertToInt(oldProp)
+  // delete(rawState, "old_property")
+  
+  return rawState, nil
+ }
 }
 ```
 
@@ -61,41 +61,44 @@ The way you wire the state upgrade depends on whether the resource is `Typed` or
 Typed resources must implement the `sdk.ResourceWithStateMigration` interface.
 
 1. Add the interface compliance check:
+
 ```go
 var (
-	_ sdk.ResourceWithUpdate         = ExampleResource{}
-	_ sdk.ResourceWithStateMigration = ExampleResource{}
+ _ sdk.ResourceWithUpdate         = ExampleResource{}
+ _ sdk.ResourceWithStateMigration = ExampleResource{}
 )
 ```
 
-2. Implement the `StateUpgraders()` function to return `sdk.StateUpgradeData`:
+1. Implement the `StateUpgraders()` function to return `sdk.StateUpgradeData`:
+
 ```go
 func (r ExampleResource) StateUpgraders() sdk.StateUpgradeData {
-	return sdk.StateUpgradeData{
-		SchemaVersion: 1, // The NEW schema version
-		Upgraders: map[int]pluginsdk.StateUpgrade{
-			0: migration.ExampleResourceV0ToV1{},
-		},
-	}
+ return sdk.StateUpgradeData{
+  SchemaVersion: 1, // The NEW schema version
+  Upgraders: map[int]pluginsdk.StateUpgrade{
+   0: migration.ExampleResourceV0ToV1{},
+  },
+ }
 }
 ```
 
 #### For Untyped Resources (using standard pluginsdk)
 
-Untyped resources return a `*pluginsdk.Resource` directly. 
+Untyped resources return a `*pluginsdk.Resource` directly.
 
 1. Update the `SchemaVersion` and `StateUpgraders` on the `pluginsdk.Resource` object:
+
 ```go
 func resourceExampleResource() *pluginsdk.Resource {
-	return &pluginsdk.Resource{
-		// ... other CRUD operations
-		
-		SchemaVersion: 1, // The NEW schema version
-		StateUpgraders: pluginsdk.StateUpgrades(map[int]pluginsdk.StateUpgrade{
-			0: migration.ExampleResourceV0ToV1{},
-		}),
+ return &pluginsdk.Resource{
+  // ... other CRUD operations
+  
+  SchemaVersion: 1, // The NEW schema version
+  StateUpgraders: pluginsdk.StateUpgrades(map[int]pluginsdk.StateUpgrade{
+   0: migration.ExampleResourceV0ToV1{},
+  }),
         // ...
-	}
+ }
 }
 ```
 

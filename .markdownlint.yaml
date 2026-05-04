@@ -4,3 +4,15 @@ MD013: false
 
 # Disable inline HTML (MD033) because prompts sometimes use XML/HTML tags
 MD033: false
+
+# Disable table column style (MD060)
+MD060: false
+
+# Disable no-blanks-blockquote (MD028)
+MD028: false
+
+# Disable fenced-code-language (MD040)
+MD040: false
+
+# Disable no-duplicate-heading (MD024)
+MD024: false

@@ -17,12 +17,14 @@ This skill assists in deprecating a resource or data source that will be removed
 
 **For Native (Pluginsdk) Resources**:
 Set the `DeprecationMessage` in the resource definition.
+
 ```go
 DeprecationMessage: "The `azurerm_example` resource has been deprecated and will be removed in v5.0 of the AzureRM Provider"
 ```
 
 **For Typed Resources**:
 Implement `sdk.ResourceWithDeprecationAndNoReplacement` or `sdk.ResourceWithDeprecationReplacedBy`.
+
 ```go
 func (r ExampleResource) DeprecationMessage() string {
     return "The `azurerm_example` resource has been deprecated and will be removed in v5.0 of the AzureRM Provider"
@@ -32,6 +34,7 @@ func (r ExampleResource) DeprecationMessage() string {
 ### 2. Conditional Registration
 
 In the service's `registration.go`, wrap the resource registration with the major version feature flag.
+
 ```go
 if !features.FivePointOh() {
     resources = append(resources, ExampleResource{})
@@ -41,11 +44,13 @@ if !features.FivePointOh() {
 ### 3. Handle Tests
 
 Conditionally skip tests in the test file.
+
 ```go
 if features.FivePointOh() {
     t.Skipf("Skipping since `azurerm_example` is deprecated and will be removed in 5.0")
 }
 ```
+
 *Note: If the Azure API no longer works, remove the test file entirely.*
 
 ### 4. Documentation

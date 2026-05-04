@@ -79,6 +79,7 @@ func TestAccExampleResource_requiresImport(t *testing.T) {
 ## Provider Factories
 
 Standard resource tests use the factories already provided by the `acceptance` package — do not declare `ProtoV5ProviderFactories` explicitly. The explicit factory is only needed for:
+
 - List Resources
 - Actions
 - Ephemeral Values
@@ -155,6 +156,7 @@ resource "azurerm_example" "import" {
 ## Regression Test Pattern
 
 When fixing a bug, use the two-commit workflow:
+
 1. **First commit:** Add the failing regression test (it should fail at this point, confirming the bug).
 2. **Second commit:** Add the fix (test passes).
 

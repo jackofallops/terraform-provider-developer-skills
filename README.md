@@ -44,4 +44,3 @@ This will parse the `apm.yml` manifest, install the configured capabilities, and
 ### Manual Integration
 
 If you aren't using an APM-compatible package manager, you can manually drop the skills directly into your project's agent context directory (such as `.agent/skills/` or `.cursor/rules/`) so your assistant can parse the `.md` instructions directly:
-
