@@ -1,0 +1,19 @@
+name: Link Checker
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.md'
+  pull_request:
+    paths:
+      - '**/*.md'
+
+jobs:
+  check-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98 # v4
+      - uses: lycheeverse/lychee-action@b40e218fdac9481d3c13098d4e1ee56f3b589356 # v2
+        with:
+          args: --verbose --no-progress './**/*.md'

@@ -1,0 +1,6 @@
+# .markdownlint.yaml
+# Disable line length (MD013) because agent prompts often contain long lines
+MD013: false
+
+# Disable inline HTML (MD033) because prompts sometimes use XML/HTML tags
+MD033: false
