@@ -28,6 +28,11 @@ func resourceExample() *pluginsdk.Resource {
 }
 ```
 
+## Atomicity & CRUD Methods
+
+> [!CAUTION]
+> **No shared CRUD helpers.** Do not attempt to deduplicate code by introducing a shared `submit` or `createUpdate` helper function. Each CRUD method (`Create`, `Update`) must be fully atomic, managing its own client calls and payload construction independently. If the existing legacy resource currently uses a combined `createUpdate` helper, you must split it into discrete, independent `Create` and `Update` functions as part of your modifications to remediate the anti-pattern.
+
 ## Steps to Add a Property
 
 ### 1. Update the Schema

@@ -26,7 +26,7 @@ type ExampleResource struct{}
 ## Atomicity & CRUD Methods
 
 > [!CAUTION]
-> **No shared CRUD helpers.** Do not attempt to deduplicate code by introducing a shared `submit` or `createUpdate` helper function. Each CRUD method (`Create`, `Update`) must be fully atomic, managing its own client calls and payload construction independently. The Typed wrapper SDK automatically handles `read-after-create` and `read-after-update`, so the `Func` should simply return `nil` upon success rather than calling the `Read` function.
+> **Remediate Combined Create/Update.** If the existing Typed resource currently uses the same `Func` for both `Create` and `Update`, or shares a helper function (like `submit` or `createUpdate`) between them, you **MUST split** the logic into discrete, independent `Create` and `Update` methods as part of your modification. Each CRUD method must manage its own client calls and payload construction independently. The Typed wrapper SDK automatically handles `read-after-create` and `read-after-update`, so the `Func` should simply return `nil` upon success rather than calling the `Read` function.
 
 ## Steps to Add a Property
 

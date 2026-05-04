@@ -166,7 +166,7 @@ Each CRUD function becomes an `sdk.ResourceFunc`. The `Timeout` field replaces t
 `Timeouts` block for that operation.
 
 > [!CAUTION]
-> **No shared CRUD helpers.** Do not attempt to deduplicate code by introducing a shared `submit` or `createUpdate` helper function. Each CRUD method (`Create`, `Update`) must be fully atomic, managing its own client calls and payload construction independently. The Typed wrapper SDK automatically handles `read-after-create` and `read-after-update`, so the `Func` should simply return `nil` upon success.
+> **Remediate Combined Create/Update.** If the native resource currently uses the same function for both `Create` and `Update` (e.g., `resourceExampleCreateUpdate`), you **MUST split** this logic during the migration. The new Typed resource must have completely independent, discrete `Create()` and `Update()` functions. Do not recreate the anti-pattern using a shared `submit` helper. Each CRUD method must manage its own client calls and payload construction independently. The Typed wrapper SDK automatically handles `read-after-create` and `read-after-update`, so the `Func` should simply return `nil` upon success.
 
 **Pattern:**
 
