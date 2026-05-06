@@ -17,7 +17,9 @@ This skill guides you through replacing legacy `pluginsdk.Retry()` and `pluginsd
 You might encounter two types of legacy polling mechanisms:
 
 ### A. Legacy `pluginsdk.Retry()`
+
 This loop repeatedly runs a function until it succeeds or hits a non-retryable error, often checking for `400 BadRequest`.
+
 ```go
 err = pluginsdk.Retry(d.Timeout(pluginsdk.TimeoutCreate), func() *pluginsdk.RetryError {
     resp, err := client.CreateOrUpdate(ctx, id, params)
@@ -33,7 +35,9 @@ err = pluginsdk.Retry(d.Timeout(pluginsdk.TimeoutCreate), func() *pluginsdk.Retr
 ```
 
 ### B. Legacy `pluginsdk.StateChangeConf`
+
 This structure polls an API via `Refresh` until the HTTP response status matches a `Target` list, remaining in a `Pending` state otherwise.
+
 ```go
 stateConf := &pluginsdk.StateChangeConf{
     Pending: []string{"404"},
@@ -57,11 +61,12 @@ if _, err := stateConf.WaitForStateContext(ctx); err != nil {
 
 ## 2. Implementing a Custom Poller
 
-A custom poller must implement the `pollers.PollerType` interface, specifically the `Poll(ctx context.Context) (*pollers.PollResult, error)` method. 
+A custom poller must implement the `pollers.PollerType` interface, specifically the `Poll(ctx context.Context) (*pollers.PollResult, error)` method.
 
 Create your poller typically in a `custompollers` package within the relevant service directory.
 
 ### Structure Example
+
 ```go
 package custompollers
 
@@ -93,7 +98,7 @@ func NewExamplePoller(cli *service.Client, id service.IdType) *examplePoller {
 ### The `Poll` Implementation
 
 > [!CAUTION]
-> **No Global `PollResult` Variables!** 
+> **No Global `PollResult` Variables!**
 > To prevent severe concurrency bugs across parallel test executions and apply operations, you **must always return a new `pollers.PollResult{}` struct directly**. Do not use package-level variables like `var pollingSuccess = pollers.PollResult{}` as was historically done in some older pollers.
 
 ```go
@@ -136,10 +141,12 @@ If you discover that the legacy `Retry` or `StateChangeConf` block contains an o
 
 ## 4. Integration
 
-Replace the old logic with your new custom poller. 
+Replace the old logic with your new custom poller.
 
-### To invoke it directly:
+### To invoke it directly
+
 Instead of `stateConf.WaitForStateContext(ctx)`:
+
 ```go
 import "github.com/hashicorp/go-azure-sdk/sdk/client/pollers"
 
@@ -150,8 +157,10 @@ if err := pollers.PollUntilDone(ctx, poller); err != nil {
 }
 ```
 
-### For operations returning a `resp.Poller`:
+### For operations returning a `resp.Poller`
+
 If you are wrapping the initial API operation directly and providing a poller struct to the client pipeline:
+
 ```go
 // Invoke initial operation (which is wired up to return your custom poller)
 resp, err := client.CreateOrUpdate(ctx, id, params)
