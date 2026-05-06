@@ -1,6 +1,6 @@
 ---
 name: migrate-to-typed-resource
-description: Assist in converting a native (*pluginsdk.Resource) resource to the Typed SDK wrapper (internal/sdk), following the provider's current implementation standard.
+description: "[AzureRM-specific] Assist in converting a native (*pluginsdk.Resource) resource to the Typed SDK wrapper (internal/sdk), following the provider's current implementation standard."
 triggers:
   - "migrate native resource to typed"
   - "convert pluginsdk resource to sdk.Resource"
@@ -9,7 +9,7 @@ triggers:
   - "migrate-to-typed-resource"
 ---
 
-# Migrate Native Resource to Typed
+# [AzureRM-specific] Migrate Native Resource to Typed
 
 This skill converts a legacy native resource (`func resourceExample() *pluginsdk.Resource`)
 to the Typed SDK wrapper (`type ExampleResource struct{}` implementing `sdk.Resource`).

@@ -1,6 +1,6 @@
 ---
 name: resource-framework-migration
-description: Assist in migrating resources from `terraform-plugin-sdk` (legacy) to `terraform-plugin-framework` using the `internal/sdk` wrapper.
+description: Assist in migrating resources from `terraform-plugin-sdk` (legacy) to `terraform-plugin-framework` using a framework wrapper pattern (e.g., `internal/sdk`).
 triggers:
   - "migrate resource to terraform-plugin-framework"
   - "convert resource to framework"
@@ -8,13 +8,15 @@ triggers:
   - "internal/sdk wrapper"
 ---
 
-# Resource Migration Skill
+# Framework Wrapper Migration
 
-This skill assists in migrating existing Terraform resources from the `terraform-plugin-sdk` (v2) to the `terraform-plugin-framework` using the custom wrapper located in `internal/sdk`.
+This skill assists in migrating existing Terraform resources from the `terraform-plugin-sdk` (v2) to the `terraform-plugin-framework` using a custom wrapper (typically located in `internal/sdk`, `internal/tf/framework/wrapper`, or an external library).
 
 ## Overview
 
-The `internal/sdk` wrapper provides a bridge between the legacy `ResourceData` patterns and the framework's typed models. It simplifies the migration by handling boilerplate and providing familiar (yet type-safe) methods.
+The wrapper provides a bridge between the legacy `ResourceData` patterns and the framework's typed models. It simplifies the migration by handling boilerplate and providing familiar (yet type-safe) methods.
+
+> **Documentation Access:** When migrating, you can find the up-to-date Markdown documentation for the framework at `https://github.com/hashicorp/web-unified-docs/tree/main/content/terraform-plugin-framework/v{VERSION}.x/docs/plugin/framework` (where `{VERSION}` matches the provider's `go.mod` version of `terraform-plugin-framework`).
 
 ## Migration Steps
 
@@ -98,7 +100,7 @@ In `internal/services/<service>/registration.go`, add the resource to the `resou
 
 ```go
 func (r Registration) FrameworkResources() []sdk.FrameworkWrappedResource {
- if !features.FivePointOh() {
+ if !features.NextMajorVersion() {
   return []sdk.FrameworkWrappedResource{}
  }
 

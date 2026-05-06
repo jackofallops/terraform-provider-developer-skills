@@ -1,6 +1,6 @@
 ---
 name: custom-poller-migration
-description: Assist in migrating legacy pluginsdk.Retry() and pluginsdk.StateChangeConf.WaitForStateContext() logic to custom pollers.
+description: "[AzureRM-specific] Assist in migrating legacy pluginsdk.Retry() and pluginsdk.StateChangeConf.WaitForStateContext() logic to custom pollers."
 triggers:
   - "replace legacy retry"
   - "migrate to custom poller"
@@ -8,7 +8,7 @@ triggers:
   - "replace StateChangeConf with poller"
 ---
 
-# Custom Poller Migration Skill
+# [AzureRM-specific] Custom Poller Migration Skill
 
 This skill guides you through replacing legacy `pluginsdk.Retry()` and `pluginsdk.StateChangeConf` blocks with custom pollers using `pollers.PollerType`. This is essential to remove `pluginsdk` dependencies from our API interaction layers and transition to the native polling mechanisms available in the `go-azure-sdk`.
 

@@ -1,13 +1,13 @@
 ---
 name: modify-typed-resource
-description: Assist in adding a new property to an existing legacy resource (Typed SDK wrapper).
+description: "[AzureRM-specific] Assist in adding a new property to an existing legacy resource (Typed SDK wrapper)."
 triggers:
   - "add property to typed resource"
   - "modify typed sdk resource"
   - "internal/sdk/resource.go modification"
 ---
 
-# Modify Typed Resource Skill
+# [AzureRM-specific] Modify Typed Resource Skill
 
 This skill assists in adding a new property to an existing legacy resource that uses the "Typed" SDK wrapper (`internal/sdk/resource.go`).
 

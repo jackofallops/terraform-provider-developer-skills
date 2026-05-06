@@ -1,6 +1,6 @@
 ---
 name: preflight-validation
-description: Assist in implementing Azure Preflight Validation in a resource's CustomizeDiff function, including selecting the correct pattern (1, 2, or 3) for the resource's create/update semantics.
+description: "[AzureRM-specific] Assist in implementing Azure Preflight Validation in a resource's CustomizeDiff function, including selecting the correct pattern (1, 2, or 3) for the resource's create/update semantics."
 triggers:
   - "preflight validation"
   - "CustomizeDiff preflight"
@@ -8,7 +8,7 @@ triggers:
   - "enhanced_validation preflight_enabled"
 ---
 
-# Preflight Validation
+# [AzureRM-specific] Preflight Validation
 
 The AzureRM provider supports plan-time validation of resource configurations via the Azure
 Preflight Validation API. This is gated behind the `features.enhanced_validation.preflight_enabled`

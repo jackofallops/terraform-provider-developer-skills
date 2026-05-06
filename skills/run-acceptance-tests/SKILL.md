@@ -1,6 +1,6 @@
 ---
 name: run-acceptance-tests
-description: Run and diagnose acceptance tests for terraform-provider-azurerm. Use when asked to run a TestAcc test, investigate a test failure, or set up a VCR replay.
+description: Run and diagnose acceptance tests for Terraform providers. Use when asked to run a TestAcc test, investigate a test failure, or set up a VCR replay.
 triggers:
   - "run acceptance test"
   - "run TestAcc"
@@ -14,12 +14,12 @@ Acceptance tests are Go tests with the `TestAcc` prefix. They make real API call
 
 ## Credential Requirement
 
-Acceptance tests require Azure credentials via `ARM_*` environment variables. **If these are not explicitly available to the agent, do not attempt to run acceptance tests directly.** Instead, ask the user to run the test and return the output.
+Acceptance tests typically require credentials via provider-specific environment variables (e.g., `ARM_*` for AzureRM). **If these are not explicitly available to the agent, do not attempt to run acceptance tests directly.** Instead, ask the user to run the test and return the output.
 
 This applies to:
 
 - All `TestAcc*` tests
-- Any test that touches Azure APIs or requires authentication
+- Any test that touches external APIs or requires authentication
 
 Unit tests (no `TestAcc` prefix) do not require credentials and can be run without asking.
 
@@ -32,7 +32,7 @@ TF_ACC=1 go test \
   ./internal/services/<service>/...
 ```
 
-- Always set `-timeout` — azurerm acceptance tests can take 60–120 minutes.
+- Always set `-timeout` — provider acceptance tests can take 60–120 minutes depending on the API.
 - The test name must match exactly (case-sensitive, supports regex).
 
 ## VCR Replay Mode (Preferred — No API Calls, No Cost)

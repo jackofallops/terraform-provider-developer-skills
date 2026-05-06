@@ -1,6 +1,6 @@
 ---
 name: provider-test-patterns
-description: Write acceptance tests for azurerm resources following the established test structure and patterns.
+description: Write acceptance tests following established terraform-plugin-testing patterns.
 triggers:
   - "write acceptance tests"
   - "add tests"
@@ -10,7 +10,9 @@ triggers:
 
 # Provider Test Patterns
 
-This skill covers writing acceptance tests for `terraform-provider-azurerm`. Tests use the `acceptance` package wrapper, which handles the majority of test setup boilerplate.
+This skill covers writing acceptance tests for Terraform providers using `hashicorp/terraform-plugin-testing`. Tests typically use `resource.TestCase`.
+
+> **Note on Provider Wrappers:** Many large providers (like `terraform-provider-azurerm`) use an `acceptance` package wrapper to handle test setup boilerplate and deterministic naming. The examples below illustrate this wrapper pattern, but the core `TestStep` concepts apply universally to standard `resource.TestCase`.
 
 ## Mandatory Test Types
 
@@ -74,7 +76,7 @@ func TestAccExampleResource_requiresImport(t *testing.T) {
 }
 ```
 
-`acceptance.BuildTestData` generates VCR-safe deterministic names and provides the `ResourceName` address. Use it — do not call `uuid.New()` or `time.Now()` directly in test configs.
+`acceptance.BuildTestData` (or your provider's equivalent) generates VCR-safe deterministic names and provides the `ResourceName` address. Use it — do not call `uuid.New()` or `time.Now()` directly in test configs, as this breaks VCR reproducibility.
 
 ## Provider Factories
 

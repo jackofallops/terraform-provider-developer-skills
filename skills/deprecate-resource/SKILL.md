@@ -1,6 +1,6 @@
 ---
 name: deprecate-resource
-description: Assist in deprecating an existing resource or data source, following the breaking changes guide.
+description: Assist in deprecating an existing resource or data source, following the provider's breaking changes guide.
 triggers:
   - "deprecate resource"
   - "remove resource in 5.0"
@@ -9,7 +9,7 @@ triggers:
 
 # Deprecate Resource Skill
 
-This skill assists in deprecating a resource or data source that will be removed in the next major version (v5.0).
+This skill assists in deprecating a resource or data source that will be removed in the next major version.
 
 ## Steps to Deprecate a Resource
 
@@ -19,7 +19,7 @@ This skill assists in deprecating a resource or data source that will be removed
 Set the `DeprecationMessage` in the resource definition.
 
 ```go
-DeprecationMessage: "The `azurerm_example` resource has been deprecated and will be removed in v5.0 of the AzureRM Provider"
+DeprecationMessage: "The `azurerm_example` resource has been deprecated and will be removed in the next major version of the Provider"
 ```
 
 **For Typed Resources**:
@@ -27,7 +27,7 @@ Implement `sdk.ResourceWithDeprecationAndNoReplacement` or `sdk.ResourceWithDepr
 
 ```go
 func (r ExampleResource) DeprecationMessage() string {
-    return "The `azurerm_example` resource has been deprecated and will be removed in v5.0 of the AzureRM Provider"
+    return "The `azurerm_example` resource has been deprecated and will be removed in the next major version of the Provider"
 }
 ```
 
@@ -36,7 +36,7 @@ func (r ExampleResource) DeprecationMessage() string {
 In the service's `registration.go`, wrap the resource registration with the major version feature flag.
 
 ```go
-if !features.FivePointOh() {
+if !features.NextMajorVersion() {
     resources = append(resources, ExampleResource{})
 }
 ```
@@ -46,8 +46,8 @@ if !features.FivePointOh() {
 Conditionally skip tests in the test file.
 
 ```go
-if features.FivePointOh() {
-    t.Skipf("Skipping since `azurerm_example` is deprecated and will be removed in 5.0")
+if features.NextMajorVersion() {
+    t.Skipf("Skipping since `azurerm_example` is deprecated and will be removed in the next major version")
 }
 ```
 
@@ -60,8 +60,8 @@ if features.FivePointOh() {
 
 ## Safety & Verification
 
-- **Feature Flag**: Always use `features.FivePointOh()` (or current major version flag) for conditional logic.
-- **Reference**: Follow the [Breaking Changes Guide](file:///Users/ste/code/go/src/github.com/hashicorp/terraform-provider-azurerm/contributing/topics/guide-breaking-changes.md).
+- **Feature Flag**: Always use the provider's major version flag (e.g. `features.NextMajorVersion()`) for conditional logic.
+- **Reference**: Follow the provider's breaking changes guide (e.g., `terraform-provider-azurerm/contributing/topics/guide-breaking-changes.md` if working on AzureRM).
 
 ## Formatting
 

@@ -1,6 +1,6 @@
 ---
 name: provider-docs
-description: Create or update azurerm provider documentation. Covers all doc types in website/docs/ with correct structure, frontmatter, and formatting rules.
+description: Create or update provider documentation. Prioritizes AzureRM's legacy website/docs/ structure as the primary default, but generalizes to terraform-plugin-docs where needed.
 triggers:
   - "write documentation"
   - "update docs"
@@ -10,7 +10,7 @@ triggers:
 
 # Provider Documentation
 
-Documentation lives under `website/docs/` and is published to the Terraform Registry. Doc changes must be in the same PR as the schema/code changes they document.
+Documentation typically lives under `docs/` for standard `terraform-plugin-docs` implementations, or under `website/docs/` for legacy structures (like AzureRM). This skill prioritizes the AzureRM legacy `website/docs/` structure as the primary example/default, ensuring it remains directly usable for its primary consumers. Doc changes must be in the same PR as the schema/code changes they document.
 
 ## Doc Type → Path Mapping
 
@@ -396,4 +396,4 @@ This list resource supports the following arguments:
 - Never describe arguments or attributes that are not implemented.
 - Keep examples minimal — show what's needed to create/use the resource, not every optional property.
 - Deprecation notes use the `->` callout syntax: `-> **Note:** This resource has been deprecated...`
-- Breaking change notes that are not yet active (gated behind `features.FivePointOh()`) must **not** appear in the documentation.
+- Breaking change notes that are not yet active (gated behind the major version feature flag) must **not** appear in the documentation.
