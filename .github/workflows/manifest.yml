@@ -17,11 +17,4 @@ jobs:
     steps:
       - uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98 # v4
       - name: Validate apm.yml capabilities
-        run: |
-          while IFS= read -r p; do
-            if [ ! -d "$p" ]; then
-              echo "Error: Directory '$p' declared in apm.yml does not exist."
-              exit 1
-            fi
-          done < <(yq e '.capabilities[].path' apm.yml)
-          echo "All capability paths exist."
+        run: ./scripts/validate-manifest.sh

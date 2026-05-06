@@ -7,3 +7,7 @@ rules:
   truthy: disable
   comments: disable
   new-line-at-end-of-file: disable
+
+ignore: |
+  node_modules/
+  .venv/

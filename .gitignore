@@ -65,3 +65,6 @@ outputs/
 generated_code/
 temp/
 debug_*.json
+
+# Downloaded tools
+bin/

@@ -1,0 +1,10 @@
+{
+  "name": "terraform-provider-developer-skills",
+  "version": "1.0.0",
+  "description": "Local dev dependencies for agent skills.",
+  "private": true,
+  "devDependencies": {
+    "markdownlint-cli2": "^0.13.0",
+    "markdown-link-check": "^3.11.0"
+  }
+}
