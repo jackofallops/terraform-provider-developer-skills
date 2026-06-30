@@ -56,7 +56,7 @@ if features.NextMajorVersion() {
 ### 4. Documentation
 
 - Add a `Note` to the resource documentation (`website/docs/r/*.html.markdown`).
-- Update the upgrade guide (`website/docs/5.0-upgrade-guide.markdown`) under `## Removed Resources`.
+- Update the upgrade guide (`website/docs/<next_major_version>-upgrade-guide.html.markdown`) under `## Removed Resources`.
 
 ## Safety & Verification
 

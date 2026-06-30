@@ -168,6 +168,108 @@ Every preflight block must include:
 4. A call to `expandCreateForMyResource` (or `expandUpdateForMyResource` for Pattern 3)
 5. A call to `preflight.NewValidationRequest` followed by `ValidateResource`
 
+### Location Fallback and Dependency Lookups
+
+If the resource must fetch a parent or dependency to discover its location (e.g., from an uncreated Virtual Network), you must implement the provider-level location fallback before aborting the preflight check. 
+
+To keep `CustomizeDiff` clean and readable, extract complex dependency lookups and fallback logic into a dedicated helper function (e.g. `resolvePreflight[Dependency]Location(...) (loc string, skip bool, err error)`).
+
+Example helper:
+```go
+// resolvePreflightVnetLocation determines the Virtual Network location used for preflight
+// validation. It returns skip=true when validation should be gracefully skipped (e.g. the
+// subnet_id is not yet known, or the Virtual Network doesn't exist and no location fallback
+// is configured).
+func resolvePreflightVnetLocation(ctx context.Context, metadata sdk.ResourceMetaData, model MyResourceModel) (vnetLoc string, skip bool, err error) {
+    // ... basic ID parsing ...
+
+    vnet, err := metadata.Client.Network.VirtualNetworks.Get(ctx, vnetId, virtualnetworks.DefaultGetOperationOptions())
+    if err != nil {
+        if !response.WasNotFound(vnet.HttpResponse) {
+            return "", false, fmt.Errorf("retrieving Virtual Network %%q for preflight validation: %%+v", vnetId.ID(), err)
+        }
+
+        // The VNet doesn't exist yet, so we can't determine its location. Rely on the configured
+        // fallback if one is available, otherwise gracefully skip preflight validation.
+        fallback := metadata.Client.Features.EnhancedValidation.LocationFallback
+        if fallback == nil {
+            metadata.Logger.Info(fmt.Sprintf("skipping preflight validation for %%q: Virtual Network %%q not found and no location fallback configured", model.Name, vnetId.ID()))
+            return "", true, nil
+        }
+
+        metadata.Logger.Info(fmt.Sprintf("Virtual Network %%q not found, relying on location fallback for preflight validation", vnetId.ID()))
+        return *fallback, false, nil
+    }
+
+    if vnet.Model == nil || vnet.Model.Location == nil {
+        return "", false, fmt.Errorf("determining Location from Virtual Network %%q for preflight validation: `location` was missing", vnetId.ID())
+    }
+
+    return *vnet.Model.Location, false, nil
+}
+```
+
+Usage in `CustomizeDiff`:
+```go
+vnetLoc, skip, err := resolvePreflightVnetLocation(ctx, metadata, model)
+if err != nil {
+    return err
+}
+if skip {
+    return nil
+}
+```
+
+---
+
+## Step 4 — Add Preflight Acceptance Test
+
+Every resource implementing preflight validation must include an acceptance test verifying that the preflight logic successfully handles a configuration during the plan phase without errors.
+
+1. Add a test function named `TestAcc[ResourceName]_completePreflightPlan`.
+2. Configure the test step with `PlanOnly: true` and `ExpectNonEmptyPlan: true`.
+3. Create a Terraform configuration helper function (e.g. `completePreflightPlan(data acceptance.TestData)`) that explicitly enables the `enhanced_validation.preflight_enabled` feature block and defines a complete, valid resource configuration.
+
+### Example Test Structure
+
+```go
+func TestAccMyResource_completePreflightPlan(t *testing.T) {
+	data := acceptance.BuildTestData(t, "azurerm_my_resource", "test")
+	r := MyResource{}
+	data.ResourceTest(t, r, []acceptance.TestStep{
+		{
+			Config:             r.completePreflightPlan(data),
+			PlanOnly:           true,
+			ExpectNonEmptyPlan: true,
+		},
+	})
+}
+
+func (r MyResource) completePreflightPlan(data acceptance.TestData) string {
+	return fmt.Sprintf(`
+provider "azurerm" {
+  features {
+    enhanced_validation {
+      preflight_enabled = true
+    }
+  }
+}
+
+resource "azurerm_resource_group" "test" {
+  name     = "acctestRG-myresource-%%[1]d"
+  location = "%%[2]s"
+}
+
+resource "azurerm_my_resource" "test" {
+  name                = "acctest-myres-%%[1]d"
+  resource_group_name = azurerm_resource_group.test.name
+  location            = azurerm_resource_group.test.location
+  // ... other required properties
+}
+`, data.RandomInteger, data.Locations.Primary)
+}
+```
+
 ---
 
 ## DAG context

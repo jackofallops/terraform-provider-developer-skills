@@ -91,7 +91,7 @@ type ExampleModel struct {
 
 ### 5. Documentation and Upgrade Guide
 
-- **Upgrade Guide**: Update the provider's upgrade guide (e.g., `website/docs/5.0-upgrade-guide.markdown`). Add an entry under `## Breaking changes in Resources` (or Data Sources) in alphabetical order, detailing the removed property, the new property, or the new default values.
+- **Upgrade Guide**: Update the provider's upgrade guide (e.g., `website/docs/<next_major_version>-upgrade-guide.html.markdown`). Add an entry under `## Breaking changes in Resources` (or Data Sources) in alphabetical order, detailing the removed property, the new property, or the new default values.
 - **Resource Documentation**: Remove the deprecated property from the resource documentation and add the new property.
   - **Important**: Breaking changes such as the default value changing, or other property behaviour changing in a way that will only be active when the major release has gone out *should not* be added to the documentation since these do not apply yet. Do not add any `**Note:** This property will do x in vNext` notes in the documentation.
 
