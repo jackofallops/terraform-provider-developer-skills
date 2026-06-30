@@ -25,6 +25,7 @@ Use the provider's major version feature flag (e.g., `features.NextMajorVersion(
     Optional: true,
 },
 // ...
+// Ensure you REMOVE `old_property` entirely from the main schema map above!
 if !features.NextMajorVersion() {
     args["old_property"] = &pluginsdk.Schema{
         Type:          pluginsdk.TypeString,
