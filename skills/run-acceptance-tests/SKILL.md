@@ -14,7 +14,7 @@ Acceptance tests are Go tests with the `TestAcc` prefix. They make real API call
 
 ## Credential Requirement
 
-Acceptance tests typically require credentials via provider-specific environment variables (e.g., `ARM_*` for AzureRM). **If these are not explicitly available to the agent, do not attempt to run acceptance tests directly.** Instead, ask the user to run the test and return the output.
+Acceptance tests typically require credentials via provider-specific environment variables (e.g., `ARM_*` for AzureRM). **Agents CANNOT run acceptance tests directly due to sandbox limitations on environment variables (sensitive values).** You MUST formulate the correct test command, ask the user to run the test on your behalf, and wait for them to return the output for analysis.
 
 This applies to:
 
