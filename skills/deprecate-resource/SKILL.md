@@ -33,20 +33,20 @@ func (r ExampleResource) DeprecationMessage() string {
 
 ### 2. Conditional Registration
 
-In the service's `registration.go`, wrap the resource registration with the major version feature flag.
+First, check the `version/VERSION` file to determine the current major version. Then, use the feature flag for the *next* major version from the `features` package (e.g., if the current version is 4.x, use `features.FivePointOh()`) to wrap the resource registration in the service's `registration.go`.
 
 ```go
-if !features.NextMajorVersion() {
+if !features.FivePointOh() {
     resources = append(resources, ExampleResource{})
 }
 ```
 
 ### 3. Handle Tests
 
-Conditionally skip tests in the test file.
+Conditionally skip tests in the test file using the same feature flag.
 
 ```go
-if features.NextMajorVersion() {
+if features.FivePointOh() {
     t.Skipf("Skipping since `azurerm_example` is deprecated and will be removed in the next major version")
 }
 ```
@@ -60,7 +60,7 @@ if features.NextMajorVersion() {
 
 ## Safety & Verification
 
-- **Feature Flag**: Always use the provider's major version flag (e.g. `features.NextMajorVersion()`) for conditional logic.
+- **Feature Flag**: Always check `version/VERSION` for the current version, then use the provider's major version flag for the *next* major version (e.g., `features.FivePointOh()`) for conditional logic. Do not guess the function name.
 - **Reference**: Follow the provider's breaking changes guide (e.g., `terraform-provider-azurerm/contributing/topics/guide-breaking-changes.md` if working on AzureRM).
 
 ## Formatting

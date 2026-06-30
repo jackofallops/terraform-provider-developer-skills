@@ -15,7 +15,7 @@ This skill assists in deprecating, renaming, or changing the behavior of a prope
 
 ### 1. Update the Schema
 
-Use the provider's major version feature flag (e.g., `features.NextMajorVersion()`) to maintain legacy behavior for the current major version. The focus is on making it as easy as possible to remove the unused code path. The default code path should be the new major version, and the legacy code path and schema modification to legacy should be gated behind a `!features.NextMajorVersion()` check so the future work to remove the legacy code path is minimal.
+First, check the `version/VERSION` file to determine the current major version. Then, use the feature flag for the *next* major version from the `features` package (e.g., if the current version is 4.x, use `features.FivePointOh()`) to maintain legacy behavior for the current major version. The focus is on making it as easy as possible to remove the unused code path. The default code path should be the new major version, and the legacy code path and schema modification to legacy should be gated behind a `!features.FivePointOh()` check so the future work to remove the legacy code path is minimal.
 
 > **Note:** Do not use in-lined anonymous functions in a property's schema definition to conditionally change the default value, validation function, etc. Regardless of the number of arguments changing, update the whole schema definition block rather than making inline changes.
 
@@ -26,7 +26,7 @@ Use the provider's major version feature flag (e.g., `features.NextMajorVersion(
 },
 // ...
 // Ensure you REMOVE `old_property` entirely from the main schema map above!
-if !features.NextMajorVersion() {
+if !features.FivePointOh() {
     args["old_property"] = &pluginsdk.Schema{
         Type:          pluginsdk.TypeString,
         Optional:      true,
@@ -48,19 +48,19 @@ If you are changing a default value, update the default value in the main schema
     Default: "3.4",
 },
 // ...
-if !features.NextMajorVersion() {
+if !features.FivePointOh() {
     args["spark_version"].Default = "2.4"
 }
 ```
 
 ### 2. Update CRUD Functions
 
-Handle both properties in your logic. **It is critical that you strictly follow the `if !features.NextMajorVersion() { ... } else { ... }` pattern.** This ensures that the post-major release cleanup is as low effort as possible—consisting mostly of deleting the `if` block and keeping the `else` block.
+Handle both properties in your logic. **It is critical that you strictly follow the `if !features.FivePointOh() { ... } else { ... }` pattern.** This ensures that the post-major release cleanup is as low effort as possible—consisting mostly of deleting the `if` block and keeping the `else` block.
 
 To achieve this, duplicate the future major version logic inside the legacy `if` branch if necessary (e.g., when checking if the user supplied the new property early). The `else` block must contain **only** the pure, final major version code without any legacy conditionals.
 
 ```go
-if !features.NextMajorVersion() {
+if !features.FivePointOh() {
     // 1. Check if they used the new property (optional in current major version)
     if v, ok := d.GetOk("new_property"); ok && v.(string) != "" {
         // Run future behavior manually for users adopting early
@@ -87,7 +87,7 @@ type ExampleModel struct {
 ### 4. Tests
 
 - Update test configurations to use the new property, but keep one test using the old property.
-- Switch the test between old and new properties conditionally using the `features.NextMajorVersion()` feature flag.
+- Switch the test between old and new properties conditionally using the `features.FivePointOh()` feature flag.
 - Wherever possible, only update the test configuration and avoid updating the test case since changes to the test cases are more involved and higher effort to clean up.
 
 ### 5. Documentation and Upgrade Guide
