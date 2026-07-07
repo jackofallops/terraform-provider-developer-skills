@@ -31,11 +31,15 @@ if !features.FivePointOh() {
         Type:          pluginsdk.TypeString,
         Optional:      true,
         Computed:      true, // Set both to Computed for renames
-        ConflictsWith: []string{"new_property"},
+        ConflictsWith: []string{"new_property"}, // ConflictsWith can only be used for top-level or nested arguments in a list with MaxItems = 1
         Deprecated:    "`old_property` has been deprecated in favour of `new_property` and will be removed in the next major version of the Provider",
     }
-    args["new_property"].Computed = true
-    args["new_property"].ConflictsWith = []string{"old_property"}
+    args["new_property"].&pluginsdk.Schema{
+        Type:          pluginsdk.TypeString,
+        Optional:      true,
+        Computed:      true,
+        ConflictsWith: []string{"old_property"},
+    }
 }
 ```
 
@@ -49,20 +53,43 @@ If you are changing a default value, update the default value in the main schema
 },
 // ...
 if !features.FivePointOh() {
-    args["spark_version"].Default = "2.4"
+    args["spark_version"] = &pluginsdk.Schema{
+        Type:     pluginsdk.TypeString,
+        Optional: true,
+        Default: "2.4", // Old default value
+    }
 }
 ```
 
 ### 2. Update CRUD Functions
 
-Handle both properties in your logic. **It is critical that you strictly follow the `if !features.FivePointOh() { ... } else { ... }` pattern.** This ensures that the post-major release cleanup is as low effort as possible—consisting mostly of deleting the `if` block and keeping the `else` block.
+Handle both properties in your logic. **It is critical that you strictly follow one of the options below:**
 
-To achieve this, duplicate the future major version logic inside the legacy `if` branch if necessary (e.g., when checking if the user supplied the new property early). The `else` block must contain **only** the pure, final major version code without any legacy conditionals.
+1. `... <major release logic> ... if !features.NextMajorVersion() { ... }` - use this pattern when possible
+2. `if !features.NextMajorVersion() { ... } else { ... }` - use this pattern when the change is complex
 
+This ensures that the post-major release cleanup is as low effort as possible, consisting mostly of deleting the `if` block (and keeping the `else` block in case of option 2).
+
+Option 1:
+```go
+// Pure future behavior. The new property must be used here.
+// This is active by default, ensuring the new property can be used immediately.
+
+if !features.NextMajorVersion() {
+    // Check if they used the old property instead of the new, if so, run the legacy behavior
+	// Note: because both properties are Optional + Computed, a `GetOk` check will not work, we must access RawConfig to determine if it was set
+    if !pluginsdk.IsExplicitlyNullInConfig(d, "old_property") { // Note: the `IsExplicitlyNullInConfig` helper only works with top level arguments
+        // Run legacy behavior
+    }
+}
+```
+
+Option 2:
 ```go
 if !features.FivePointOh() {
     // 1. Check if they used the new property (optional in current major version)
-    if v, ok := d.GetOk("new_property"); ok && v.(string) != "" {
+    // Note: because both properties are Optional + Computed, a `GetOk` check will not work, we must access RawConfig to determine if it was set
+    if !pluginsdk.IsExplicitlyNullInConfig(d, "new_property") { // Note: the `IsExplicitlyNullInConfig` helper only works with top level arguments
         // Run future behavior manually for users adopting early
     } else {
         // Run legacy behavior
