@@ -144,7 +144,7 @@ resource "azurerm_example" "test" {
 
 func (r ExampleResource) requiresImport(data acceptance.TestData) string {
     return fmt.Sprintf(`
-%s
+%[1]s
 
 resource "azurerm_example" "import" {
   name                = azurerm_example.test.name
@@ -178,5 +178,6 @@ func TestAccExampleResource_regressionGH12345(t *testing.T) {
 - [ ] `acceptance.BuildTestData` used — no raw `uuid` or `time.Now` calls in configs
 - [ ] `ImportStateVerifyIgnore` justified (only for truly unrecoverable values)
 - [ ] Config helpers are methods on the resource test struct
+- [ ] Config helpers contain only indexed placeholders (`%[1]d`, `%[2]s`, etc.)
 - [ ] `resource.ParallelTest` used (via `data.ResourceTest`) — not `resource.Test` unless explicitly sharing state
 - [ ] Regression tests named and linked to issue
